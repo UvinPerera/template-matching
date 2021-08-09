@@ -1,16 +1,19 @@
 import cv2 as cv
 import numpy as np
-# from matplotlib import pyplot as plt
-img_rgb = cv.imread('mario.png')
-img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
-template = cv.imread('mario_coin.png',0)
-w, h = template.shape[::-1]
-res = cv.matchTemplate(img_gray,template,cv.TM_CCOEFF_NORMED)
-threshold = 0.8
-loc = np.where( res >= threshold)
-x =0 
+
+image = cv.imread('sinhala-text.png') # read image
+image_to_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY) # convret the readed image to grey
+temp = cv.imread('template.png',0) # read the template
+width, height = temp.shape[::-1]  # get width and height of the template
+
+result = cv.matchTemplate(image_to_gray,temp,cv.TM_CCOEFF_NORMED) # match template and assign the the result to variable
+threshold = 0.9  # set filtering thresholds
+loc = np.where( result >= threshold)
+
+num_of_occurences =0 # number of occurences
 for pt in zip(*loc[::-1]):
-    cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 2)
-    x=x+1
-cv.imwrite('res.png',img_rgb)
-print(res)
+    cv.rectangle(image, pt, (pt[0] + width, pt[1] + height), (0,255,0), 2)
+    num_of_occurences=num_of_occurences+1
+    
+cv.imwrite('result.png',image)
+print("Number of Occurences:"+str(num_of_occurences))
